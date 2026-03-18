@@ -1,0 +1,89 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = await getCollection('articles');
+const sortedArticles = articles.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<Layout
+	title="Ratgeber - Digitale Berufs Zertifikate Guide"
+	description="Entdecken Sie unsere umfassenden Ratgeber zu digitalen Berufszertifikaten, Online-Weiterbildungen und Karriere-Tipps."
+>
+	<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+		<!-- Main Content -->
+		<div class="lg:col-span-2">
+			<h1 class="text-4xl font-bold text-gray-900 mb-8">
+				Ratgeber & Artikel
+			</h1>
+
+			<div class="space-y-6">
+				{sortedArticles.map((article) => (
+					<article class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+						<a href={`/blog/${article.slug}`} class="block">
+							<h2 class="text-2xl font-bold text-gray-900 mb-3 hover:text-blue-600 transition">
+								{article.data.title}
+							</h2>
+							<p class="text-gray-600 mb-4">
+								{article.data.description}
+							</p>
+							<div class="flex items-center justify-between text-sm text-gray-500">
+								<span>
+									{new Date(article.data.pubDate).toLocaleDateString('de-DE', {
+										year: 'numeric',
+										month: 'long',
+										day: 'numeric'
+									})}
+								</span>
+								<span class="text-blue-600 font-semibold hover:underline">
+									Weiterlesen →
+								</span>
+							</div>
+							{article.data.tags && article.data.tags.length > 0 && (
+								<div class="flex flex-wrap gap-2 mt-4">
+									{article.data.tags.map((tag) => (
+										<span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
+											{tag}
+										</span>
+									))}
+								</div>
+							)}
+						</a>
+					</article>
+				))}
+			</div>
+		</div>
+
+		<!-- Sidebar -->
+		<div class="lg:col-span-1">
+			<!-- Ad Space - Sidebar -->
+			<div class="bg-white rounded-lg shadow-md p-4 mb-8">
+				<div class="h-96 flex items-center justify-center bg-gray-100 border border-dashed border-gray-300 text-gray-400 text-sm">
+					Werbefläche (300x250)
+				</div>
+			</div>
+
+			<!-- Categories -->
+			<div class="bg-white rounded-lg shadow-md p-6">
+				<h3 class="font-semibold text-lg mb-4 text-gray-900">Beliebte Themen</h3>
+				<ul class="space-y-2 text-sm">
+					<li>
+						<a href="/blog" class="text-blue-600 hover:underline">Alle Artikel</a>
+					</li>
+					<li>
+						<a href="#" class="text-gray-600 hover:text-blue-600">Digitale Zertifikate</a>
+					</li>
+					<li>
+						<a href="#" class="text-gray-600 hover:text-blue-600">Online-Kurse</a>
+					</li>
+					<li>
+						<a href="#" class="text-gray-600 hover:text-blue-600">Karriere-Tipps</a>
+					</li>
+					<li>
+						<a href="#" class="text-gray-600 hover:text-blue-600">IT-Zertifizierungen</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</Layout>
